@@ -3,17 +3,32 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
+pr:
+  autoCancel: true
+
 trigger:
 - main
 
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+stages:
+  - stage: validate
+    displayName: "Ensure that the code works"
+    jobs:
+      - job: audit
+        steps:
+          - task: CMake@1
+            inputs:
+              cmakeArgs: audit lint
+  - stage: releaseCandidate
+    displayName: "Build the App"
+    dependsOn: validate
+  - stage: testEnv
+    displayName: "Deploy to Test Environment"
+    dependsOn: releaseCandidate
+  - stage: prodEnv
+    displayName: "Deploy to Production Environment"
+    dependsOn: testEnv
+  
