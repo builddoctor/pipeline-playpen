@@ -24,11 +24,30 @@ stages:
               cmakeArgs: audit lint
   - stage: releaseCandidate
     displayName: "Build the App"
+    jobs:
+      - job: releaseCandidate
+        steps:
+          - task: CMake@1
+            inputs:
+              cmakeArgs: image
     dependsOn: validate
   - stage: testEnv
     displayName: "Deploy to Test Environment"
     dependsOn: releaseCandidate
+    jobs:
+      - job: testEnv
+        steps:
+          - task: CMake@1
+            inputs:
+              cmakeArgs: testEnv
+
   - stage: prodEnv
     displayName: "Deploy to Production Environment"
     dependsOn: testEnv
+    jobs:
+      - job: prodEnv
+        steps:
+          - task: CMake@1
+            inputs:
+              cmakeArgs: prodEnv
   
