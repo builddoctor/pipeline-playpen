@@ -7,6 +7,9 @@ audit:
 lint:
 	npm exec eslint app.js
 
+test:
+	npm test
+
 check:
 	pip3 install checkov -q
 	checkov -d .
