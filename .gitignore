@@ -2,3 +2,5 @@ node_modules
 secret.tfvars
 .terraform.lock.hcl
 .terraform
+*tfstate*
+.env

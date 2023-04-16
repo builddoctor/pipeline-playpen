@@ -40,6 +40,9 @@ stages:
           - task: CMake@1
             inputs:
               cmakeArgs: testEnv
+      - job: dastScanTest
+        steps:
+          - bash: "dast.sh"
 
   - stage: prodEnv
     displayName: "Deploy to Production Environment"
@@ -50,4 +53,8 @@ stages:
           - task: CMake@1
             inputs:
               cmakeArgs: prodEnv
+
+      - job: dastScanTest
+        steps:
+          - bash: "dast.sh"
   
