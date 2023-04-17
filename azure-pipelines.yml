@@ -22,13 +22,14 @@ stages:
   - stage: releaseCandidate
     displayName: "Build the App"
     jobs:
-      steps:
-      - task: ContainerBuild@0
-        inputs:
-          dockerRegistryServiceConnection: 'Azure Container Repository'
-          Dockerfile: 'Dockerfile'
-          buildContext: '.'
-          tags: '$(Build.BuildId)'
+      - job: "Really build the app"
+        steps:
+        - task: ContainerBuild@0
+          inputs:
+            dockerRegistryServiceConnection: 'Azure Container Repository'
+            Dockerfile: 'Dockerfile'
+            buildContext: '.'
+            tags: '$(Build.BuildId)'
 
     dependsOn: validate
   - stage: testEnv
