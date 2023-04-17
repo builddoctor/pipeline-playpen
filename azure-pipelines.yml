@@ -24,12 +24,14 @@ stages:
     jobs:
       - job: "dockerBuild"
         steps:
-        - task: ContainerBuild@0
+        - task: Docker@2
           inputs:
-            dockerRegistryServiceConnection: 'Azure Container Repository'
+            containerRegistry: 'Azure Container Repo'
+            repository: 'playpen'
+            command: 'buildAndPush'
             Dockerfile: 'Dockerfile'
             buildContext: '.'
-            tags: '$(Build.BuildId)'
+  
 
     dependsOn: validate
   - stage: testEnv
