@@ -105,7 +105,6 @@ resource "azurerm_service_plan" "test" {
   sku_name            = "F1"
 
 
-
 }
 
 resource "azurerm_linux_web_app" "example" {
@@ -114,16 +113,21 @@ resource "azurerm_linux_web_app" "example" {
   location            = azurerm_service_plan.test.location
   service_plan_id     = azurerm_service_plan.test.id
   https_only          = true
+
+
   logs {
     detailed_error_messages = true
   }
-
-
 
   site_config {
     ftps_state    = "Disabled"
     http2_enabled = true
     always_on = false
+
+    application_stack {
+      docker_image = "${azurerm_container_registry.acr.login_server}/app"
+      docker_image_tag = "1.0"
+    }
 
   }
 }

@@ -18,23 +18,34 @@ stages:
       - job: audit
         steps:
           - bash: make audit lint
+
   - stage: releaseCandidate
     displayName: "Build the App"
     jobs:
-      - job: releaseCandidate
-        steps:
-          - bash: make image
+      - task: ContainerBuild@0
+        inputs:
+          dockerRegistryServiceConnection: 'Azure Container Repository'
+          #repository: # string. Container repository.
+          Dockerfile: 'Dockerfile'
+          buildContext: '.'
+          tags: '$(Build.BuildId)'
 
     dependsOn: validate
   - stage: testEnv
     displayName: "Deploy to Test Environment"
     dependsOn: releaseCandidate
     jobs:
-      - job: testEnv
-        steps:
-          - bash: testEnv
+      - deployment: testEnv
+        displayName: do the deploy to test
+        environment: "Test Environment"
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - bash: ./deploy.sh test
 
       - job: dastScanTest
+        dependsOn: testEnv
         steps:
           - bash: "dast.sh test"
 
