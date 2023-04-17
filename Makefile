@@ -12,5 +12,5 @@ test:
 
 check:
 	pip3 install checkov -q
-	checkov -d .
+	checkov -d . --quiet
 

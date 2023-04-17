@@ -16,7 +16,7 @@ terraform {
 resource "azuredevops_project" "project" {
   name        = "Playpen"
   description = "CI/CD research"
-  features = {
+  features    = {
     "testplans" = "disabled"
     "artifacts" = "disabled"
   }
@@ -59,7 +59,7 @@ resource "azuredevops_check_business_hours" "example" {
 }
 
 variable "subscription_id" {
-  
+
 }
 
 # Azure Stuff
@@ -71,16 +71,22 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "test" {
-  name     = "pipeline-playment"
+  name     = "pipeline-playpen"
   location = "Australia Southeast"
 }
-
+#checkov:skip=CKV_AZURE_164: no need to sign playpen images
+#checkov:skip=CKV_AZURE_165: no need for geolocated playpen images
 resource "azurerm_container_registry" "acr" {
-  name                = "builddoctorplaypen"
-  resource_group_name = azurerm_resource_group.test.name
-  location            = azurerm_resource_group.test.location
-  sku                 = "Basic"
-  admin_enabled       = false
+  name                          = "builddoctorplaypen"
+  resource_group_name           = azurerm_resource_group.test.name
+  location                      = azurerm_resource_group.test.location
+  sku                           = "Basic"
+  admin_enabled                 = false
+  public_network_access_enabled = true
+
+  retention_policy {
+
+  }
 }
 
 resource "azurerm_log_analytics_workspace" "logs" {
@@ -89,6 +95,37 @@ resource "azurerm_log_analytics_workspace" "logs" {
   resource_group_name = azurerm_resource_group.test.name
   sku                 = "PerGB2018"
   retention_in_days   = 30
+}
+
+resource "azurerm_service_plan" "test" {
+  name                = "test_plan"
+  resource_group_name = azurerm_resource_group.test.name
+  location            = azurerm_resource_group.test.location
+  os_type             = "Linux"
+  sku_name            = "F1"
+
+
+
+}
+
+resource "azurerm_linux_web_app" "example" {
+  name                = "test-app-pipeline-playpen"
+  resource_group_name = azurerm_resource_group.test.name
+  location            = azurerm_service_plan.test.location
+  service_plan_id     = azurerm_service_plan.test.id
+  https_only          = true
+  logs {
+    detailed_error_messages = true
+  }
+
+
+
+  site_config {
+    ftps_state    = "Disabled"
+    http2_enabled = true
+    always_on = false
+
+  }
 }
 
 # ADO stuff that consumes Azure Stuff
