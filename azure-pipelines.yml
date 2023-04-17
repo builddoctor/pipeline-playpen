@@ -1,13 +1,11 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
+
 # https://aka.ms/yaml
 
 pr:
   autoCancel: true
 
 trigger:
-- main
+  - main
 
 pool:
   vmImage: ubuntu-latest
@@ -19,17 +17,14 @@ stages:
     jobs:
       - job: audit
         steps:
-          - task: CMake@1
-            inputs:
-              cmakeArgs: audit lint
+          - bash: make audit lint
   - stage: releaseCandidate
     displayName: "Build the App"
     jobs:
       - job: releaseCandidate
         steps:
-          - task: CMake@1
-            inputs:
-              cmakeArgs: image
+          - bash: make image
+
     dependsOn: validate
   - stage: testEnv
     displayName: "Deploy to Test Environment"
@@ -37,12 +32,11 @@ stages:
     jobs:
       - job: testEnv
         steps:
-          - task: CMake@1
-            inputs:
-              cmakeArgs: testEnv
+          - bash: testEnv
+
       - job: dastScanTest
         steps:
-          - bash: "dast.sh"
+          - bash: "dast.sh test"
 
   - stage: prodEnv
     displayName: "Deploy to Production Environment"
@@ -50,11 +44,10 @@ stages:
     jobs:
       - job: prodEnv
         steps:
-          - task: CMake@1
-            inputs:
-              cmakeArgs: prodEnv
+          - bash: make prodEnv
+
 
       - job: dastScanTest
         steps:
-          - bash: "dast.sh"
+          - bash: "dast.sh production"
   
