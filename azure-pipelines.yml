@@ -22,7 +22,7 @@ stages:
   - stage: releaseCandidate
     displayName: "Build the App"
     jobs:
-      - job: "Really build the app"
+      - job: "dockerBuild"
         steps:
         - task: ContainerBuild@0
           inputs:
