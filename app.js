@@ -1,4 +1,3 @@
-import { Domain } from 'domain'
 import express from 'express'
 import message from './domain.js'
 
