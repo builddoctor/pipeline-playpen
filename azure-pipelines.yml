@@ -22,10 +22,10 @@ stages:
   - stage: releaseCandidate
     displayName: "Build the App"
     jobs:
+      steps:
       - task: ContainerBuild@0
         inputs:
           dockerRegistryServiceConnection: 'Azure Container Repository'
-          #repository: # string. Container repository.
           Dockerfile: 'Dockerfile'
           buildContext: '.'
           tags: '$(Build.BuildId)'
