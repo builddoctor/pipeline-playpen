@@ -4,3 +4,4 @@ secret.tfvars
 .terraform
 *tfstate*
 .env
+coverage
