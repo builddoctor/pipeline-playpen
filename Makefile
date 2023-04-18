@@ -1,10 +1,10 @@
 image:
 	docker build . -t builddoctor/playpen:latest
 
-audit:
+audit: install
 	npm audit
 
-lint:
+lint: install
 	npm exec eslint app.js
 
 test:
@@ -14,3 +14,7 @@ check:
 	pip3 install checkov -q
 	checkov -d . --quiet
 
+install:
+	npm install
+
+.PHONY: image audit lint test check install
