@@ -23,4 +23,5 @@ You'd be surprised.  In my day job we're seeing that people use legacy features 
 * Docker for containerisation
 * Still deciding on container runtime
 * GitHub Advanced Security for SAST, with extra Trivy
+* OWASP Zap for DAST (https://marketplace.visualstudio.com/items?itemName=CSE-DevOps.zap-scanner)
 * 
