@@ -31,7 +31,7 @@ stages:
             command: 'buildAndPush'
             Dockerfile: 'Dockerfile'
             buildContext: '.'
-            tags:
+            tags: |
               latest
               $(Build.BuildId)
   
