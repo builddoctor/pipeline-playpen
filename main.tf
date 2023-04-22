@@ -11,7 +11,10 @@ terraform {
     }
   }
 }
-
+# vars
+variable "subscription_id" {}
+variable "subscription_name" {}
+variable "spn_tenant_id" {}
 # ADO resources
 
 resource "azuredevops_project" "project" {
@@ -59,9 +62,7 @@ resource "azuredevops_check_business_hours" "example" {
   friday               = true
 }
 
-variable "subscription_id" {
 
-}
 
 # Azure Stuff
 provider "azurerm" {
@@ -136,6 +137,16 @@ resource "azurerm_linux_web_app" "example" {
 # ADO stuff that consumes Azure Stuff
 
 # This resource doesn't support ACR right now.
+
+resource "azuredevops_serviceendpoint_azurerm" "azure" {
+
+  project_id = azuredevops_project.project.id
+  service_endpoint_name = "Azure RM (TF)"
+  description = "Managed by Terraform"
+  azurerm_spn_tenantid = var.spn_tenant_id
+  azurerm_subscription_id = var.subscription_id
+  azurerm_subscription_name = var.subscription_name
+}
 
 #resource "azuredevops_serviceendpoint_dockerregistry" "registry" {
 #  authorization = {}
