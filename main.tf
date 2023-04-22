@@ -76,6 +76,7 @@ resource "azurerm_resource_group" "test" {
   name     = "pipeline-playpen"
   location = "Australia Southeast"
 }
+
 #checkov:skip=CKV_AZURE_164: no need to sign playpen images
 #checkov:skip=CKV_AZURE_165: no need for geolocated playpen images
 resource "azurerm_container_registry" "acr" {
@@ -105,8 +106,6 @@ resource "azurerm_service_plan" "test" {
   location            = azurerm_resource_group.test.location
   os_type             = "Linux"
   sku_name            = "F1"
-
-
 }
 
 resource "azurerm_linux_web_app" "example" {
@@ -116,6 +115,11 @@ resource "azurerm_linux_web_app" "example" {
   service_plan_id     = azurerm_service_plan.test.id
   https_only          = true
 
+  app_settings                      = {
+    "DOCKER_REGISTRY_SERVER_URL" = azurerm_container_registry.acr.login_server
+    "DOCKER_REGISTRY_SERVER_USERNAME" = azurerm_container_registry.acr.admin_username
+    "DOCKER_REGISTRY_SERVER_PASSWORD" = azurerm_container_registry.acr.admin_password
+  }
 
   logs {
     detailed_error_messages = true
@@ -136,8 +140,6 @@ resource "azurerm_linux_web_app" "example" {
 
 # ADO stuff that consumes Azure Stuff
 
-# This resource doesn't support ACR right now.
-
 resource "azuredevops_serviceendpoint_azurerm" "azure" {
 
   project_id = azuredevops_project.project.id
@@ -147,7 +149,7 @@ resource "azuredevops_serviceendpoint_azurerm" "azure" {
   azurerm_subscription_id = var.subscription_id
   azurerm_subscription_name = var.subscription_name
 }
-
+# This resource doesn't support ACR right now.
 #resource "azuredevops_serviceendpoint_dockerregistry" "registry" {
 #  authorization = {}
 #
