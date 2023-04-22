@@ -132,7 +132,7 @@ resource "azurerm_linux_web_app" "example" {
 
     application_stack {
       docker_image = "${azurerm_container_registry.acr.login_server}/app"
-      docker_image_tag = "1.0"
+      docker_image_tag = "latest"
     }
 
   }
