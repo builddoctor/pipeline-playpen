@@ -31,7 +31,9 @@ stages:
             command: 'buildAndPush'
             Dockerfile: 'Dockerfile'
             buildContext: '.'
-            tags: latest $(Build.BuildId)
+            tags:
+              latest
+              $(Build.BuildId)
   
 
     dependsOn: validate
@@ -54,7 +56,7 @@ stages:
                   WebAppName: 'test-app-pipeline-playpen'
                   DockerNamespace: 'builddoctorplaypen.azurecr.io'
                   DockerRepository: 'app'
-                  DockerImageTag: '$(Build.BuildNumber)'
+                  DockerImageTag: '$(Build.BuildId)'
                 
 
       - job: dastScanTest
