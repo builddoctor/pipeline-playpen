@@ -31,6 +31,7 @@ stages:
             command: 'buildAndPush'
             Dockerfile: 'Dockerfile'
             buildContext: '.'
+            tags: latest $(Build.BuildId)
   
 
     dependsOn: validate
