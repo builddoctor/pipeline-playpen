@@ -45,7 +45,16 @@ stages:
           runOnce:
             deploy:
               steps:
-                - bash: ./deploy.sh test
+              - task: AzureRmWebAppDeployment@4
+                inputs:
+                  ConnectionType: 'AzureRM'
+                  azureSubscription: 'Azure RM (TF)'
+                  appType: 'webAppContainer'
+                  WebAppName: 'test-app-pipeline-playpen'
+                  DockerNamespace: 'builddoctorplaypen.azurecr.io'
+                  DockerRepository: 'app'
+                  DockerImageTag: '$(Build.BuildNumber)'
+                
 
       - job: dastScanTest
         dependsOn: testEnv
@@ -59,6 +68,7 @@ stages:
       - job: prodEnv
         steps:
           - bash: make prodEnv
+
 
 
       - job: dastScanTest
