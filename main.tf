@@ -3,6 +3,7 @@ terraform {
     azurerm = {
       source  = "hashicorp/azurerm"
       version = "=3.52.0"
+
     }
     azuredevops = {
       source  = "microsoft/azuredevops"
@@ -81,7 +82,7 @@ resource "azurerm_container_registry" "acr" {
   resource_group_name           = azurerm_resource_group.test.name
   location                      = azurerm_resource_group.test.location
   sku                           = "Basic"
-  admin_enabled                 = false
+  admin_enabled                 = true
   public_network_access_enabled = true
 
   retention_policy {
@@ -134,10 +135,13 @@ resource "azurerm_linux_web_app" "example" {
 
 # ADO stuff that consumes Azure Stuff
 
-resource "azuredevops_serviceendpoint_dockerregistry" "repo" {
-  project_id            = azuredevops_project.project.id
-  service_endpoint_name = "Azure Container Repo"
-  docker_registry       = azurerm_container_registry.acr.login_server
-  registry_type         = "Others"
-}
+# This resource doesn't support ACR right now.
 
+#resource "azuredevops_serviceendpoint_dockerregistry" "registry" {
+#  authorization = {}
+#
+#  project_id            = azuredevops_project.project.id
+#  service_endpoint_name = "Playpen ACR"
+#  docker_registry       = azurerm_container_registry.acr.login_server
+#  registry_type         = "ACR"
+#}
