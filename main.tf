@@ -87,9 +87,6 @@ resource "azurerm_container_registry" "acr" {
   admin_enabled                 = false
   public_network_access_enabled = true
 
-  retention_policy {
-
-  }
 }
 
 resource "azurerm_log_analytics_workspace" "logs" {
@@ -142,7 +139,7 @@ resource "azurerm_app_service" "example" {
     http2_enabled = true
     use_32_bit_worker_process = true
     always_on = false
-    linux_fx_version = "DOCKER|${azurerm_container_registry.acr.login_server}/app"
+    linux_fx_version = "DOCKER|${azurerm_container_registry.acr.login_server}/app:latest"
 #    container_registry_use_managed_identity = false
 #    container_registry_managed_identity_client_id = ""
 
@@ -156,9 +153,8 @@ resource "azurerm_app_service" "example" {
 
 resource "azurerm_role_assignment" "example" {
   principal_id                     = azurerm_app_service.example.identity[0].principal_id
-  role_definition_name             = "Reader"
+  role_definition_name             = "AcrPull"
   scope                            = azurerm_container_registry.acr.id
-#  skip_service_principal_aad_check = true
 }
 
 # ADO stuff that consumes Azure Stuff
