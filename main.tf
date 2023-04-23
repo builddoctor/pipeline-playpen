@@ -84,7 +84,7 @@ resource "azurerm_container_registry" "acr" {
   resource_group_name           = azurerm_resource_group.test.name
   location                      = azurerm_resource_group.test.location
   sku                           = "Basic"
-  admin_enabled                 = true
+  admin_enabled                 = false
   public_network_access_enabled = true
 
   retention_policy {
@@ -100,42 +100,65 @@ resource "azurerm_log_analytics_workspace" "logs" {
   retention_in_days   = 30
 }
 
-resource "azurerm_service_plan" "test" {
+resource "azurerm_app_service_plan" "test" {
   name                = "test_plan"
   resource_group_name = azurerm_resource_group.test.name
   location            = azurerm_resource_group.test.location
-  os_type             = "Linux"
-  sku_name            = "F1"
+  kind = "Linux"
+
+  reserved = true
+
+  sku {
+    size = "F1"
+    tier = "Free"
+  }
 }
 
-resource "azurerm_linux_web_app" "example" {
-  name                = "test-app-pipeline-playpen"
+resource "azurerm_app_service" "example" {
+  name                = "test-builddoctor-pipeline-playpen"
+  location            = azurerm_app_service_plan.test.location
   resource_group_name = azurerm_resource_group.test.name
-  location            = azurerm_service_plan.test.location
-  service_plan_id     = azurerm_service_plan.test.id
-  https_only          = true
+  app_service_plan_id = azurerm_app_service_plan.test.id
 
-  app_settings                      = {
-    "DOCKER_REGISTRY_SERVER_URL" = azurerm_container_registry.acr.login_server
-    "DOCKER_REGISTRY_SERVER_USERNAME" = azurerm_container_registry.acr.admin_username
-    "DOCKER_REGISTRY_SERVER_PASSWORD" = azurerm_container_registry.acr.admin_password
+  https_only          = true
+  identity {
+    type = "SystemAssigned"
   }
 
+
+
+#  app_settings                      = {
+#    "DOCKER_REGISTRY_SERVER_URL" = azurerm_container_registry.acr.login_server
+#    "DOCKER_REGISTRY_SERVER_USERNAME" = azurerm_container_registry.acr.admin_username
+#    "DOCKER_REGISTRY_SERVER_PASSWORD" = azurerm_container_registry.acr.admin_password
+#  }
+
   logs {
-    detailed_error_messages = true
+#    detailed_error_messages = true
   }
 
   site_config {
     ftps_state    = "Disabled"
     http2_enabled = true
+    use_32_bit_worker_process = true
     always_on = false
+    linux_fx_version = "DOCKER|${azurerm_container_registry.acr.login_server}/app"
+#    container_registry_use_managed_identity = false
+#    container_registry_managed_identity_client_id = ""
 
-    application_stack {
-      docker_image = "${azurerm_container_registry.acr.login_server}/app"
-      docker_image_tag = "latest"
-    }
+#    application_stack {
+#      docker_image = "${azurerm_container_registry.acr.login_server}/app"
+#      docker_image_tag = "latest"
+#    }
 
   }
+}
+
+resource "azurerm_role_assignment" "example" {
+  principal_id                     = azurerm_app_service.example.identity[0].principal_id
+  role_definition_name             = "Reader"
+  scope                            = azurerm_container_registry.acr.id
+#  skip_service_principal_aad_check = true
 }
 
 # ADO stuff that consumes Azure Stuff
@@ -149,6 +172,7 @@ resource "azuredevops_serviceendpoint_azurerm" "azure" {
   azurerm_subscription_id = var.subscription_id
   azurerm_subscription_name = var.subscription_name
 }
+
 # This resource doesn't support ACR right now.
 #resource "azuredevops_serviceendpoint_dockerregistry" "registry" {
 #  authorization = {}
