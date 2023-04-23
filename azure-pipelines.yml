@@ -53,7 +53,7 @@ stages:
                   ConnectionType: 'AzureRM'
                   azureSubscription: 'Azure RM (TF)'
                   appType: 'webAppContainer'
-                  WebAppName: 'test-app-pipeline-playpen'
+                  WebAppName: 'test-builddoctor-pipeline-playpen'
                   DockerNamespace: 'builddoctorplaypen.azurecr.io'
                   DockerRepository: 'app'
                   DockerImageTag: '$(Build.BuildId)'
