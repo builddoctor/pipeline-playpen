@@ -63,7 +63,6 @@ resource "azuredevops_check_business_hours" "example" {
 }
 
 
-
 # Azure Stuff
 provider "azurerm" {
   subscription_id = var.subscription_id
@@ -84,7 +83,7 @@ resource "azurerm_container_registry" "acr" {
   resource_group_name           = azurerm_resource_group.test.name
   location                      = azurerm_resource_group.test.location
   sku                           = "Basic"
-  admin_enabled                 = false
+  admin_enabled                 = true
   public_network_access_enabled = true
 
 }
@@ -101,72 +100,74 @@ resource "azurerm_app_service_plan" "test" {
   name                = "test_plan"
   resource_group_name = azurerm_resource_group.test.name
   location            = azurerm_resource_group.test.location
-  kind = "Linux"
+  kind                = "Linux"
 
   reserved = true
 
   sku {
-    size = "F1"
-    tier = "Free"
+    size = "B1"
+    tier = "Basic"
   }
 }
 
-resource "azurerm_app_service" "example" {
+resource "azurerm_app_service" example {
   name                = "test-builddoctor-pipeline-playpen"
-  location            = azurerm_app_service_plan.test.location
-  resource_group_name = azurerm_resource_group.test.name
   app_service_plan_id = azurerm_app_service_plan.test.id
-
-  https_only          = true
-  identity {
-    type = "SystemAssigned"
+  location            = azurerm_resource_group.test.location
+  resource_group_name = azurerm_resource_group.test.name
+  app_settings        = {
+    "DOCKER_REGISTRY_SERVER_URL"          = azurerm_container_registry.acr.login_server
+    "DOCKER_REGISTRY_SERVER_USERNAME"     = azurerm_container_registry.acr.admin_username
+    "DOCKER_REGISTRY_SERVER_PASSWORD"     = azurerm_container_registry.acr.admin_password
+    "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "false"
   }
-
-
-
-#  app_settings                      = {
-#    "DOCKER_REGISTRY_SERVER_URL" = azurerm_container_registry.acr.login_server
-#    "DOCKER_REGISTRY_SERVER_USERNAME" = azurerm_container_registry.acr.admin_username
-#    "DOCKER_REGISTRY_SERVER_PASSWORD" = azurerm_container_registry.acr.admin_password
-#  }
-
+  client_cert_mode = "Required"
+  https_only       = true
+  #  key_vault_reference_identity_id = "SystemAssigned"
   logs {
-#    detailed_error_messages = true
-  }
+    detailed_error_messages_enabled = true
+    failed_request_tracing_enabled  = true
 
+    application_logs {
+      file_system_level = "Error"
+    }
+
+  }
   site_config {
-    ftps_state    = "Disabled"
-    http2_enabled = true
-    use_32_bit_worker_process = true
-    always_on = false
-    linux_fx_version = "DOCKER|${azurerm_container_registry.acr.login_server}/app:latest"
-#    container_registry_use_managed_identity = false
-#    container_registry_managed_identity_client_id = ""
 
-#    application_stack {
-#      docker_image = "${azurerm_container_registry.acr.login_server}/app"
-#      docker_image_tag = "latest"
-#    }
+    acr_use_managed_identity_credentials = false
+    always_on                            = false
 
+    dotnet_framework_version    = "v4.0"
+    ftps_state                  = "FtpsOnly"
+    http2_enabled               = true
+    ip_restriction              = []
+    linux_fx_version            = "DOCKER|builddoctorplaypen.azurecr.io/playpen:latest"
+    local_mysql_enabled         = false
+    managed_pipeline_mode       = "Integrated"
+    min_tls_version             = "1.2"
+    number_of_workers           = 1
+    remote_debugging_enabled    = false
+    scm_ip_restriction          = []
+    scm_type                    = "None"
+    scm_use_main_ip_restriction = false
+    use_32_bit_worker_process   = true
+    vnet_route_all_enabled      = false
+    websockets_enabled          = false
   }
-}
 
-resource "azurerm_role_assignment" "example" {
-  principal_id                     = azurerm_app_service.example.identity[0].principal_id
-  role_definition_name             = "AcrPull"
-  scope                            = azurerm_container_registry.acr.id
-}
 
-# ADO stuff that consumes Azure Stuff
+  timeouts {}
+}
 
 resource "azuredevops_serviceendpoint_azurerm" "azure" {
 
-  project_id = azuredevops_project.project.id
-  service_endpoint_name = "Azure RM (TF)"
-  description = "Managed by Terraform"
-  azurerm_spn_tenantid = var.spn_tenant_id
-  azurerm_subscription_id = var.subscription_id
-  azurerm_subscription_name = var.subscription_name
+project_id = azuredevops_project.project.id
+service_endpoint_name = "Azure RM (TF)"
+description = "Managed by Terraform"
+azurerm_spn_tenantid = var.spn_tenant_id
+azurerm_subscription_id = var.subscription_id
+azurerm_subscription_name = var.subscription_name
 }
 
 # This resource doesn't support ACR right now.
