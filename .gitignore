@@ -5,3 +5,4 @@ secret.tfvars
 *tfstate*
 .env
 coverage
+/zap.xml
