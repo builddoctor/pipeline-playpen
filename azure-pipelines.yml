@@ -55,7 +55,7 @@ stages:
                   appType: 'webAppContainer'
                   WebAppName: 'test-builddoctor-pipeline-playpen'
                   DockerNamespace: 'builddoctorplaypen.azurecr.io'
-                  DockerRepository: 'app'
+                  DockerRepository: 'playpen'
                   DockerImageTag: '$(Build.BuildId)'
                 
 
