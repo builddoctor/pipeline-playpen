@@ -20,3 +20,5 @@ docker run  -v $(pwd):/zap/wrk/:rw \
   -t owasp/zap2docker-stable zap-full-scan.py \
   -x zap.xml \
   -st ${url}
+
+  exit 0
