@@ -64,7 +64,7 @@ stages:
         steps:
           - task: Bash@03
             inputs:
-              filePath: 'dash.sh'
+              filePath: 'dast.sh'
               arguments: 'test'
               failOnStderr: false
           - task: PublishTestResults@2
