@@ -67,6 +67,7 @@ stages:
               filePath: 'dast.sh'
               arguments: 'test'
               failOnStderr: false
+          - bash: 'ls -ltr'
           - task: PublishTestResults@2
             inputs:
               testResultsFormat: 'JUnit'
