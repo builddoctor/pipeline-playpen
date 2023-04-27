@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -x
+
+ls -l
 
 case "${1}" in
   test)

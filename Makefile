@@ -17,4 +17,7 @@ check:
 install:
 	npm install
 
+clean:
+	rm -f zap.xml
+
 .PHONY: image audit lint test check install
