@@ -62,7 +62,15 @@ stages:
       - job: dastScanTest
         dependsOn: testEnv
         steps:
-          - bash: "./dast.sh test"
+          - task: Bash@03
+            inputs:
+              filePath: 'dash.sh'
+              arguments: 'test'
+              failOnStderr: false
+          - task: PublishTestResults@2
+            inputs:
+              testResultsFormat: 'JUnit'
+              testResultsFiles: 'zap.xml'
 
   - stage: prodEnv
     displayName: "Deploy to Production Environment"
