@@ -2,7 +2,7 @@
 
 set -x
 
-ls -l
+ls -ltr
 
 case "${1}" in
   test)
@@ -25,6 +25,6 @@ docker run  -v $(pwd):/zap/wrk/:rw \
   -x zap.xml \
   -st ${url}
 
-  exit 0
+  ls -ltr
 
-  https://github.com/zaproxy/zaproxy/issues/6993
+  exit 0
