@@ -17,7 +17,10 @@ check:
 install:
 	npm install
 
+junit.xml: zap.xml
+	 ./transform.sh > $@
+
 clean:
-	rm -f zap.xml
+	rm -f *.xml
 
 .PHONY: image audit lint test check install

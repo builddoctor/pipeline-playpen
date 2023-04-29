@@ -1,9 +1,5 @@
 #!/bin/bash
 
-set -x
-
-ls -ltr
-
 case "${1}" in
   test)
     url='https://test-builddoctor-pipeline-playpen.azurewebsites.net/'
@@ -25,6 +21,9 @@ docker run  -v $(pwd):/zap/wrk/:rw \
   -x zap.xml \
   -st ${url}
 
-  ls -ltr
+  cat zap.xml
+  # thanks coderpatros!
+  #https://github.com/coderpatros/zap2junit
+  xsltproc zap2junit.xsl zap.xml
 
   exit 0

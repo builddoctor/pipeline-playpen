@@ -67,11 +67,11 @@ stages:
               filePath: 'dast.sh'
               arguments: 'test'
               failOnStderr: false
-          - bash: 'ls -ltr'
+          - bash: 'make junit.xml'
           - task: PublishTestResults@2
             inputs:
               testResultsFormat: 'JUnit'
-              testResultsFiles: 'zap.xml'
+              testResultsFiles: 'junit.xml'
 
   - stage: prodEnv
     displayName: "Deploy to Production Environment"
