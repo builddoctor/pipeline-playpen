@@ -21,9 +21,4 @@ docker run  -v $(pwd):/zap/wrk/:rw \
   -x zap.xml \
   -st ${url}
 
-  cat zap.xml
-  # thanks coderpatros!
-  #https://github.com/coderpatros/zap2junit
-  xsltproc zap2junit.xsl zap.xml
-
   exit 0

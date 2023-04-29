@@ -1,4 +1,6 @@
 #!/bin/bash
+#
+set -eup pipefail
 
 # thanks coderpatros!
 #https://github.com/coderpatros/zap2junit
