@@ -8,7 +8,7 @@ case $(uname -s) in
     java -jar  /opt/homebrew/share/saxon-b/saxon9.jar -xsl:zap2junit.xsl -s:zap.xml
   ;;
   Linux)
-    which saxonb-xslt || sudo apt-get install -qq saxonb-xslt
+    which saxonb-xslt || sudo apt-get install -qq libsaxonb-java
     saxonb-xslt -xsl:zap2junit.xsl -s:zap.xml
   ;;
   *)
