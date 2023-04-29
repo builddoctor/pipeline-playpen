@@ -10,7 +10,7 @@ set -eup pipefail
 dependendency() {
   local cmd=$1
   local package=$2
-  which "${cmd}" || sudo apt-get install "${package}"
+  which "${cmd}" || sudo apt-get install "${package}" -y
 }
 
 transform() {
