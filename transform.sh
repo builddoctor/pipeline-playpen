@@ -6,13 +6,21 @@ set -eup pipefail
 #https://github.com/coderpatros/zap2junit
 # can't find a cross-platform XSL 2.0 transfomer
 #
+
+dependendency() {
+  local cmd=$1
+  local package=$2
+  which "${cmd}" || sudo apt-get install "${pkg}"
+}
+
 transform() {
     case $(uname -s) in
       Darwin)
         java -jar  /opt/homebrew/share/saxon-b/saxon9.jar -xsl:zap2junit.xsl -s:zap.xml
       ;;
       Linux)
-        which saxonb-xslt || sudo apt-get install -qq libsaxonb-java libxml2-utils
+        dependendency saxonb-xslt libsaxonb-java
+        dependendency xmllint libxml2-utils
         saxonb-xslt -xsl:zap2junit.xsl -s:zap.xml
       ;;
       *)
