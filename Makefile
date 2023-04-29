@@ -18,7 +18,7 @@ install:
 	npm install
 
 junit.xml: zap.xml
-	 ./transform.sh > $@
+	 ./transform.sh
 
 clean:
 	rm -f *.xml

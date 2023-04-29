@@ -13,21 +13,16 @@ dependendency() {
   which "${cmd}" || sudo apt-get install "${package}" -y
 }
 
-transform() {
-    case $(uname -s) in
-      Darwin)
-        java -jar  /opt/homebrew/share/saxon-b/saxon9.jar -xsl:zap2junit.xsl -s:zap.xml
-      ;;
-      Linux)
-        dependendency xmllint libxml2-utils
-        dependendency saxonb-xslt libsaxonb-java
-        saxonb-xslt -xsl:zap2junit.xsl -s:zap.xml
-      ;;
-      *)
-        echo "Sorry, I don't know this OS"
-        echo 1
-      ;;
-    esac
-}
-
-transform | xmllint --format -
+case $(uname -s) in
+  Darwin)
+    java -jar  /opt/homebrew/share/saxon-b/saxon9.jar -xsl:zap2junit.xsl -s:zap.xml
+  ;;
+  Linux)
+    dependendency saxonb-xslt libsaxonb-java
+    saxonb-xslt -xsl:zap2junit.xsl -s:zap.xml > junit.xml
+  ;;
+  *)
+    echo "Sorry, I don't know this OS"
+    echo 1
+  ;;
+esac
