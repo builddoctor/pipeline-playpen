@@ -10,7 +10,7 @@ transform() {
         java -jar  /opt/homebrew/share/saxon-b/saxon9.jar -xsl:zap2junit.xsl -s:zap.xml
       ;;
       Linux)
-        which saxonb-xslt || sudo apt-get install -qq libsaxonb-java xmllint
+        which saxonb-xslt || sudo apt-get install -qq libsaxonb-java libxml2-utils
         saxonb-xslt -xsl:zap2junit.xsl -s:zap.xml
       ;;
       *)
