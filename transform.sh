@@ -5,9 +5,10 @@
 # can't find a cross-platform XSL 2.0 transfomer
 case $(uname -s) in
   Darwin)
-    java -jar  /opt/homebrew/Cellar/saxon-b/9.1.0.8/share/saxon-b/saxon9.jar -xsl:zap2junit.xsl -s:zap.xml
+    java -jar  /opt/homebrew/share/saxon-b/saxon9.jar -xsl:zap2junit.xsl -s:zap.xml
   ;;
   Linux)
+    which saxonb-xslt || sudo apt-get install -qq saxonb-xslt
     saxonb-xslt -xsl:zap2junit.xsl -s:zap.xml
   ;;
   *)
