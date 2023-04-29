@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-set -eup pipefail
+set -xeuo pipefail
 
 # thanks coderpatros!
 #https://github.com/coderpatros/zap2junit
@@ -19,8 +19,8 @@ transform() {
         java -jar  /opt/homebrew/share/saxon-b/saxon9.jar -xsl:zap2junit.xsl -s:zap.xml
       ;;
       Linux)
-        dependendency saxonb-xslt libsaxonb-java
         dependendency xmllint libxml2-utils
+        dependendency saxonb-xslt libsaxonb-java
         saxonb-xslt -xsl:zap2junit.xsl -s:zap.xml
       ;;
       *)
