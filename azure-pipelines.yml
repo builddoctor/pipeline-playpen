@@ -72,6 +72,8 @@ stages:
             inputs:
               testResultsFormat: 'JUnit'
               testResultsFiles: 'junit.xml'
+              failTaskOnFailedTests: true
+
 
   - stage: prodEnv
     displayName: "Deploy to Production Environment"
