@@ -2,7 +2,7 @@ FROM node:lts-alpine
 WORKDIR /usr/app
 COPY package*.json ./
 RUN npm install
-COPY . .
+COPY src/ .
 ENV HOST 0.0.0.0
 ENV PORT 8080
 EXPOSE 8080
