@@ -1,4 +1,4 @@
 function message() {
     return "Hello Amigos";
 }
-export default message;
+module.exports = message
