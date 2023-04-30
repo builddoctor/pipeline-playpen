@@ -2,7 +2,7 @@
   "name": "playpen",
   "version": "1.0.0",
   "description": "Example app and pipeline",
-  "type": "module",
+  "type": "commonjs",
   "main": "app.js",
   "scripts": {
     "test": "jest --coverage"
