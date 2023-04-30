@@ -5,7 +5,7 @@ audit: install
 	npm audit
 
 lint: install
-	npm exec eslint app.js
+	npm exec eslint src
 
 test:
 	npm test

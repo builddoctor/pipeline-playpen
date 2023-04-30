@@ -3,7 +3,7 @@ const message = require('./domain.js')
 
 
 const app = express()
-const port = 8080
+
 app.disable('x-powered-by');
 
 app.get('/', (req, res) => {
