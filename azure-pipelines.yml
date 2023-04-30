@@ -57,6 +57,11 @@ stages:
                   DockerNamespace: 'builddoctorplaypen.azurecr.io'
                   DockerRepository: 'playpen'
                   DockerImageTag: '$(Build.BuildId)'
+
+      - job: testAcceptance
+        dependsOn: testEnv
+        steps:
+          - bash: "curl -fv https://test-builddoctor-pipeline-playpen.azurewebsites.net/"
                 
 
       - job: dastScanTest
