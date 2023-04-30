@@ -23,4 +23,11 @@ junit.xml: zap.xml
 clean:
 	rm -f *.xml
 
-.PHONY: image audit lint test check install
+acceptance:
+	docker run -dp 8080:8080 builddoctor/playpen:latest
+	sleep 2
+	curl http://localhost:8080/
+	docker ps | grep -v CONTAINER | awk '{print $1}' | xargs docker kill
+
+
+.PHONY: image audit lint test check install acceptance
