@@ -7,7 +7,10 @@ audit: install
 lint: install
 	npm exec eslint src
 
-test:
+build:
+	mkdir -p build
+
+test: build
 	npm test
 
 check:
@@ -21,7 +24,7 @@ junit.xml: zap.xml
 	 ./transform.sh
 
 clean:
-	rm -f *.xml
+	rm -rf *.xml build
 
 acceptance:
 	docker run -dp 8080:8080 builddoctor/playpen:latest

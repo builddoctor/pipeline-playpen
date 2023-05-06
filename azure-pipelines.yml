@@ -18,9 +18,26 @@ stages:
       - job: audit
         steps:
           - bash: make audit lint
+          - bash: make test
+            failOnStderr: false
+
+          - task: PublishTestResults@2
+            inputs:
+              testResultsFormat: JUnit
+              testResultsFiles: 'build/reports/report.xml'
+              failTaskOnFailedTests: true
+
+          - task: PublishCodeCoverageResults@1
+            inputs:
+                codeCoverageTool: Cobertura
+                reportDirectory: 'build/coverage'
+                summaryFileLocation: 'build/coverage/cobertura-coverage.xml'
+                failIfCoverageEmpty: true
+
 
   - stage: releaseCandidate
     displayName: "Build the App"
+    dependsOn: validate
     jobs:
       - job: "dockerBuild"
         steps:
@@ -36,7 +53,7 @@ stages:
               $(Build.BuildId)
   
 
-    dependsOn: validate
+
   - stage: testEnv
     displayName: "Deploy to Test Environment"
     dependsOn: releaseCandidate
