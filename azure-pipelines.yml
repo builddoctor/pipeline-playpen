@@ -30,7 +30,6 @@ stages:
           - task: PublishCodeCoverageResults@1
             inputs:
                 codeCoverageTool: Cobertura
-                reportDirectory: 'build/coverage'
                 summaryFileLocation: 'build/coverage/cobertura-coverage.xml'
                 failIfCoverageEmpty: true
 
