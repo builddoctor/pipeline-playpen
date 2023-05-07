@@ -12,7 +12,7 @@ describe("Test the root path", () => {
     ${'x-frame-options'}    | ${'SAMEORIGIN'}
     ${'x-content-type-options'} | ${'nosniff'}
     ${'referrer-policy'} | ${''}
-    ${'permissions-policy'} | ${''}
+    ${'permissions-policy'} | ${'geolocation=()'}
   `(
     'should return "$expectedValue" when checking "$header"',
     ({ header, expectedValue }) => {
