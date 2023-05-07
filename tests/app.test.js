@@ -8,9 +8,9 @@ describe("Test the root path", () => {
     header                   | expectedValue
 
     ${'content-security-policy'}        | ${"default-src 'self'; img-src 'self'; child-src 'none'"}
-    ${'strict-transport-security'}   | ${'Strict-Transport-Security: max-age=31536000; includeSubDomains'}
-    ${'x-frame-options'}    | ${'X-Frame-Options: SAMEORIGIN'}
-    ${'x-content-type-options'} | ${'X-Content-Type-Options: nosniff'}
+    ${'strict-transport-security'}   | ${'max-age=31536000; includeSubDomains'}
+    ${'x-frame-options'}    | ${'SAMEORIGIN'}
+    ${'x-content-type-options'} | ${'nosniff'}
     ${'referrer-policy'} | ${''}
     ${'permissions-policy'} | ${''}
   `(
