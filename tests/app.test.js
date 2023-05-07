@@ -12,6 +12,7 @@ describe("Test the root path", () => {
     ${'x-frame-options'}    | ${'SAMEORIGIN'}
     ${'x-content-type-options'} | ${'nosniff'}
     ${'referrer-policy'} | ${''}
+    ${'cache-control'} | ${'no-cache, no-store, must-revalidate'}
     ${'permissions-policy'} | ${'geolocation=()'}
   `(
     'should return "$expectedValue" when checking "$header"',

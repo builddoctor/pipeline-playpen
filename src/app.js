@@ -11,6 +11,7 @@ app.get('/', (req, res) => {
     res.header('Strict-Transport-Security', "max-age=31536000; includeSubDomains");
     res.header('X-Frame-Options', "SAMEORIGIN");
     res.header('X-Content-Type-Options', "nosniff");
+    res.header('Cache-Control', "no-cache, no-store, must-revalidate");
     res.header('Referrer-Policy', "");
     res.header('Permissions-Policy', "geolocation=()");
     res.send(message());
