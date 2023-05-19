@@ -77,7 +77,7 @@ stages:
       - job: testAcceptance
         dependsOn: testEnv
         steps:
-          - bash: "sleep 5; curl -fv https://test-builddoctor-pipeline-playpen.azurewebsites.net/"
+          - bash: "./acceptance.sh"
                 
 
       - job: dastScanTest
