@@ -17,8 +17,9 @@ esac
 
 docker run  -v $(pwd):/zap/wrk/:rw \
    --user root \
-  -t owasp/zap2docker-stable zap-full-scan.py \
+  -t owasp/zap2docker-stable zap-baseline.py \
   -x zap.xml \
+  -u https://github.com/builddoctor/pipeline-playpen/blob/main/zap.conf \
   -t ${url}
 
   exit 0
