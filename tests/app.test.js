@@ -1,7 +1,7 @@
 const request = require("supertest");
 const app = require("../src/app");
 
-describe("Test the root path", () => {
+describe("Test the app urls", () => {
 
 
   it.each`
@@ -26,7 +26,13 @@ describe("Test the root path", () => {
                 });
     },
   );
-
+   test("It should return proper headers everywhere", () => {
+   return request(app)
+     .get("/sitemap.xml")
+     .then(response => {
+        expect(response.headers['x-frame-options']).toBe('SAMEORIGIN');
+     });
+   });
 
 
     test("It should not advertise it's technology", () => {
