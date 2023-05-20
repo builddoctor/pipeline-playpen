@@ -13,7 +13,7 @@ describe("Test the app urls", () => {
     ${'x-frame-options'}    | ${'SAMEORIGIN'}
     ${'x-content-type-options'} | ${'nosniff'}
     ${'referrer-policy'} | ${''}
-    ${'cache-control'} | ${'public, max-age=300'}
+    ${'cache-control'} | ${'public, max-age=300, immutable'}
     ${'permissions-policy'} | ${'geolocation=()'}
     ${'permissions-policy'} | ${'geolocation=()'}
   `(
