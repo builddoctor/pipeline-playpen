@@ -83,11 +83,6 @@ stages:
       - job: dastScanTest
         dependsOn: testEnv
         steps:
-          - task: Bash@03
-            inputs:
-              filePath: 'dast.sh'
-              arguments: 'test'
-              failOnStderr: false
           - bash: 'make junit.xml'
           - task: PublishTestResults@2
             inputs:

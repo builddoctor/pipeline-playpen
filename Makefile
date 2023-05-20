@@ -20,6 +20,9 @@ check:
 install:
 	npm install
 
+zap.xml:
+	./dast.sh test
+
 junit.xml: zap.xml
 	 ./transform.sh
 

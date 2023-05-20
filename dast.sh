@@ -20,6 +20,7 @@ docker run  -v $(pwd):/zap/wrk/:rw \
   -t owasp/zap2docker-stable zap-baseline.py \
   -x zap.xml \
   -u https://github.com/builddoctor/pipeline-playpen/blob/main/zap.conf \
+  -d \
   -t ${url}
 
   exit 0
