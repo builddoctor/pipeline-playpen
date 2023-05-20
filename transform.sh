@@ -6,6 +6,8 @@ set -xeuo pipefail
 #https://github.com/coderpatros/zap2junit
 # can't find a cross-platform XSL 2.0 transfomer
 #
+#
+OUTPUT='junit.xml'
 
 dependendency() {
   local cmd=$1
@@ -15,11 +17,11 @@ dependendency() {
 
 case $(uname -s) in
   Darwin)
-    java -jar  /opt/homebrew/share/saxon-b/saxon9.jar -xsl:zap2junit.xsl -s:zap.xml
+    java -jar  /opt/homebrew/share/saxon-b/saxon9.jar -xsl:zap2junit.xsl -s:zap.xml > "${OUTPUT}"
   ;;
   Linux)
     dependendency saxonb-xslt libsaxonb-java
-    saxonb-xslt -xsl:zap2junit.xsl -s:zap.xml > junit.xml
+    saxonb-xslt -xsl:zap2junit.xsl -s:zap.xml > "${OUTPUT}"
   ;;
   *)
     echo "Sorry, I don't know this OS"
