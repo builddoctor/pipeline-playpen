@@ -84,7 +84,7 @@ stages:
         dependsOn: testAcceptance
         steps:
           - bash: 'make zap.xml junit.xml'
-          - task: BuildArtifacts@1
+          - task: PublishBuildArtifacts@1
             inputs:
               pathToPublish: 'zap.html'
               artifactName: 'DAST'
