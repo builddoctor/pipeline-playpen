@@ -20,7 +20,7 @@ docker run  -v "$(pwd):/zap/wrk/:rw" \
   -t owasp/zap2docker-stable zap-baseline.py \
   -x zap.xml \
   -u file:///zap/wrk/zap.conf \
-  -d \
+  -d -I -r zap.html \
   -t ${url}
 
   exit 0
