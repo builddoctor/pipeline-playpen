@@ -14,6 +14,7 @@ describe("Test the root path", () => {
     ${'referrer-policy'} | ${''}
     ${'cache-control'} | ${'no-cache, no-store, must-revalidate'}
     ${'permissions-policy'} | ${'geolocation=()'}
+    ${'permissions-policy'} | ${'geolocation=()'}
   `(
     'should return "$expectedValue" when checking "$header"',
     ({ header, expectedValue }) => {

@@ -81,9 +81,9 @@ stages:
                 
 
       - job: dastScanTest
-        dependsOn: testEnv
+        dependsOn: testAcceptance
         steps:
-          - bash: 'make junit.xml'
+          - bash: 'make zap.xml junit.xml'
           - task: PublishTestResults@2
             inputs:
               testResultsFormat: 'JUnit'
