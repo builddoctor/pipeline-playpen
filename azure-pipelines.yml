@@ -109,15 +109,15 @@ stages:
                     ConnectionType: 'AzureRM'
                     azureSubscription: 'Azure RM (TF)'
                     appType: 'webAppContainer'
-                    WebAppName: 'test-builddoctor-pipeline-playpen'
+                    WebAppName: 'prod-builddoctor-pipeline-playpen'
                     DockerNamespace: 'builddoctorplaypen.azurecr.io'
                     DockerRepository: 'playpen'
                     DockerImageTag: '$(Build.BuildId)'
 
-      - job: testAcceptance
-        dependsOn: testEnv
+      - job: prodAcceptance
+        dependsOn: prodEnv
         steps:
-          - bash: "./bin/acceptance.sh test"
+          - bash: "./bin/acceptance.sh prod"
 
       - job: dastScanProd
         steps:
