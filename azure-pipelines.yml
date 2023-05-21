@@ -1,4 +1,3 @@
-
 # https://aka.ms/yaml
 
 pr:
@@ -29,9 +28,9 @@ stages:
 
           - task: PublishCodeCoverageResults@1
             inputs:
-                codeCoverageTool: Cobertura
-                summaryFileLocation: 'build/coverage/cobertura-coverage.xml'
-                failIfCoverageEmpty: true
+              codeCoverageTool: Cobertura
+              summaryFileLocation: 'build/coverage/cobertura-coverage.xml'
+              failIfCoverageEmpty: true
 
 
   - stage: releaseCandidate
@@ -40,17 +39,17 @@ stages:
     jobs:
       - job: "dockerBuild"
         steps:
-        - task: Docker@2
-          inputs:
-            containerRegistry: 'Playpen ACR'
-            repository: 'playpen'
-            command: 'buildAndPush'
-            Dockerfile: 'Dockerfile'
-            buildContext: '.'
-            tags: |
-              latest
-              $(Build.BuildId)
-  
+          - task: Docker@2
+            inputs:
+              containerRegistry: 'Playpen ACR'
+              repository: 'playpen'
+              command: 'buildAndPush'
+              Dockerfile: 'Dockerfile'
+              buildContext: '.'
+              tags: |
+                latest
+                $(Build.BuildId)
+
 
 
   - stage: testEnv
@@ -64,21 +63,21 @@ stages:
           runOnce:
             deploy:
               steps:
-              - task: AzureRmWebAppDeployment@4
-                inputs:
-                  ConnectionType: 'AzureRM'
-                  azureSubscription: 'Azure RM (TF)'
-                  appType: 'webAppContainer'
-                  WebAppName: 'test-builddoctor-pipeline-playpen'
-                  DockerNamespace: 'builddoctorplaypen.azurecr.io'
-                  DockerRepository: 'playpen'
-                  DockerImageTag: '$(Build.BuildId)'
+                - task: AzureRmWebAppDeployment@4
+                  inputs:
+                    ConnectionType: 'AzureRM'
+                    azureSubscription: 'Azure RM (TF)'
+                    appType: 'webAppContainer'
+                    WebAppName: 'test-builddoctor-pipeline-playpen'
+                    DockerNamespace: 'builddoctorplaypen.azurecr.io'
+                    DockerRepository: 'playpen'
+                    DockerImageTag: '$(Build.BuildId)'
 
       - job: testAcceptance
         dependsOn: testEnv
         steps:
-          - bash: "./acceptance.sh"
-                
+          - bash: "./bin/acceptance.sh test"
+
 
       - job: dastScanTest
         dependsOn: testAcceptance
@@ -87,7 +86,7 @@ stages:
           - task: PublishBuildArtifacts@1
             inputs:
               pathToPublish: 'zap/zap.html'
-              artifactName: 'DAST'
+              artifactName: 'DAST-TEST'
           - task: PublishTestResults@2
             inputs:
               testResultsFormat: 'JUnit'
@@ -98,17 +97,35 @@ stages:
     displayName: "Deploy to Production Environment"
     dependsOn: testEnv
     jobs:
-      - job: prodEnv
+      - deployment: prodEnv
+        displayName: do the deploy to Production
+        environment: "Prod Environment"
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureRmWebAppDeployment@4
+                  inputs:
+                    ConnectionType: 'AzureRM'
+                    azureSubscription: 'Azure RM (TF)'
+                    appType: 'webAppContainer'
+                    WebAppName: 'test-builddoctor-pipeline-playpen'
+                    DockerNamespace: 'builddoctorplaypen.azurecr.io'
+                    DockerRepository: 'playpen'
+                    DockerImageTag: '$(Build.BuildId)'
+
+      - job: testAcceptance
+        dependsOn: testEnv
         steps:
-          - bash: make prodEnv
+          - bash: "./bin/acceptance.sh test"
 
       - job: dastScanProd
         steps:
-          -  bash: 'make zap.xml junit.xml ENV=prod'
+          - bash: 'make zap.xml junit.xml ENV=prod'
           - task: PublishBuildArtifacts@1
             inputs:
               pathToPublish: 'zap/zap.html'
-              artifactName: 'DAST'
+              artifactName: 'DAST-PROD'
           - task: PublishTestResults@2
             inputs:
               testResultsFormat: 'JUnit'
