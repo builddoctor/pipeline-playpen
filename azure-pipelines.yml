@@ -99,7 +99,7 @@ stages:
     jobs:
       - deployment: prodEnv
         displayName: do the deploy to Production
-        environment: "Prod Environment"
+        environment: "Production Environment"
         strategy:
           runOnce:
             deploy:
