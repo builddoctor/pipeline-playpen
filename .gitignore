@@ -6,3 +6,5 @@ secret.tfvars
 .env
 coverage
 *.xml
+/zap.yaml
+/zap.html

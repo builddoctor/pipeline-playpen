@@ -27,7 +27,7 @@ junit.xml: zap.xml
 	 ./transform.sh
 
 clean:
-	rm -rf *.xml build
+	rm -rf *.xml build *.html zap.yaml
 
 acceptance:
 	docker run -dp 8080:8080 builddoctor/playpen:latest
