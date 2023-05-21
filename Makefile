@@ -21,10 +21,10 @@ install:
 	npm install
 
 zap.xml:
-	./dast.sh test
+	./bin/dast.sh $(ENV)
 
 junit.xml: zap.xml
-	 ./transform.sh
+	 ./bin/transform.sh
 
 clean:
 	rm -rf *.xml build *.html zap.yaml

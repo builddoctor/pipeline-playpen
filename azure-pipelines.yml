@@ -83,7 +83,7 @@ stages:
       - job: dastScanTest
         dependsOn: testAcceptance
         steps:
-          - bash: 'make zap.xml junit.xml'
+          - bash: 'make zap.xml junit.xml ENV=test'
           - task: PublishBuildArtifacts@1
             inputs:
               pathToPublish: 'zap/zap.html'
@@ -104,5 +104,14 @@ stages:
 
       - job: dastScanProd
         steps:
-          - bash: "dast.sh production"
+          -  bash: 'make zap.xml junit.xml ENV=prod'
+          - task: PublishBuildArtifacts@1
+            inputs:
+              pathToPublish: 'zap/zap.html'
+              artifactName: 'DAST'
+          - task: PublishTestResults@2
+            inputs:
+              testResultsFormat: 'JUnit'
+              testResultsFiles: 'junit.xml'
+              failTaskOnFailedTests: true
   
