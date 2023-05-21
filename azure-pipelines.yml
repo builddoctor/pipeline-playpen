@@ -86,7 +86,7 @@ stages:
           - bash: 'make zap.xml junit.xml'
           - task: PublishBuildArtifacts@1
             inputs:
-              pathToPublish: 'zap.html'
+              pathToPublish: 'zap/zap.html'
               artifactName: 'DAST'
           - task: PublishTestResults@2
             inputs:

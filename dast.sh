@@ -1,12 +1,10 @@
 #!/bin/bash
 
-case "${1}" in
-  test)
-    url='https://test-builddoctor-pipeline-playpen.azurewebsites.net/'
-  ;;
+BASE="builddoctor-pipeline-playpen.azurewebsites.net/"
 
-  prod)
-    url='https//devops.nz'
+case "${1}" in
+  test|prod)
+    url="https://${1}-${BASE}"
   ;;
 
   *)
@@ -19,9 +17,8 @@ docker run  -v "$(pwd):/zap/wrk/:rw" \
    --user root \
   -t owasp/zap2docker-stable zap-baseline.py \
   -x zap.xml \
-  -u file:///zap/wrk/zap.conf \
-  -l FAIL \
-  -d -I -r zap.html \
+  -u file:///zap/wrk/zap/zap.conf \
+  -d -I -r zap/zap.html \
   -t ${url}
 
   exit 0
