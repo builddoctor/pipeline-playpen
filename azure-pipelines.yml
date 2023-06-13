@@ -36,6 +36,8 @@ stages:
   - stage: releaseCandidate
     displayName: "Build the App"
     dependsOn: validate
+    condition: and(eq(variables['Build.SourceBranch'], 'refs/heads/main'),
+      eq(dependencies.validate.result, 'Succeeded'))
     jobs:
       - job: "dockerBuild"
         steps:
@@ -49,7 +51,6 @@ stages:
               tags: |
                 latest
                 $(Build.BuildId)
-
 
 
   - stage: testEnv
@@ -142,4 +143,3 @@ stages:
               testResultsFormat: 'JUnit'
               testResultsFiles: 'junit.xml'
               failTaskOnFailedTests: true
-  
