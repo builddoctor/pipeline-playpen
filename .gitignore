@@ -1,7 +1,8 @@
 node_modules
 secret.tfvars
-.terraform.lock.hcl
 .terraform
+# .terraform.lock.hcl is deliberately NOT ignored - it is committed so that
+# every checkout and pipeline run resolves identical provider versions.
 *tfstate*
 .env
 coverage
